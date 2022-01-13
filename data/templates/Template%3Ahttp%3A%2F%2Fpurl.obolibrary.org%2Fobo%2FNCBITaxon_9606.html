@@ -1,0 +1,184 @@
+<div style="margin-left:45px">
+  <br><br>
+<h3>Here you can edit or delete the subject [[this.label]]:</h3> <br>
+<a href="RDFBones_NameEntry"><span class='fa fa-arrow-right' style='pointer-events: none;'></span>&nbsp; <strong> Back to Person Entry Form</strong></a> 
+<hr>
+
+<semantic-form
+post-action='reload'
+persistence='sparql'
+subject=[[this]]
+fields='[
+
+{
+    "id": "label",
+    "label": "Change unique label",
+    "maxOccurs": 1,
+    "minOccurs": 1,
+    "insertPattern": "
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+INSERT {GRAPH ?mygraph {  
+      ?subject rdfs:label ?value .
+      }
+} WHERE {
+    BIND(URI(STR(\"http://anthrograph.anthropologie.uni-freiburg.de-homo-sapiens-graph\")) AS ?mygraph ) .
+    }"
+,
+"selectPattern": "
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    SELECT $value WHERE {
+    ?subject rdfs:label ?value .
+    } ",
+
+"deletePattern": "
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    DELETE {
+    ?subject rdfs:label ?value .
+    } WHERE {?subject rdfs:label ?value .} ",
+
+"constraints": [{
+                 "validatePattern":"
+                         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                         PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+                         ASK WHERE { FILTER NOT EXISTS {
+   									         	?s rdfs:label $value.
+  				                    ?s a obo:NCBITaxon_9606 .
+                              
+  											    }}",
+                  "message": "Label already exists"
+                  }]
+    },
+
+
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasName>" predicate="<http://www.w3.org/2006/vcard/ns#givenName>" fieldID="firstname" fieldlabel="First Name" maxOccurs="1"]] 
+,
+
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasName>" predicate="<http://www.w3.org/2006/vcard/ns#familyName>" fieldID="lastname" fieldlabel="Family Name" maxOccurs="1"]]  
+,
+
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasEmail>" predicate="<http://purl.obolibrary.org/obo/IAO_0000115>" fieldID="email" fieldlabel="Email Address" maxOccurs="1"]]
+, 
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasTelephone>" predicate="<http://purl.obolibrary.org/obo/IAO_0000115>" fieldID="phone" fieldlabel="Telephone" maxOccurs="1"]]  
+,
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasAddress>" predicate="<http://www.w3.org/2006/vcard/ns#country-name>" fieldID="country" fieldlabel="Country" maxOccurs="1"]]     
+,
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasAddress>" predicate="<http://www.w3.org/2006/vcard/ns#locality>" fieldID="city" fieldlabel="City" maxOccurs="1"]]    
+,
+
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasAddress>" predicate="<http://www.w3.org/2006/vcard/ns#streetAddress>" fieldID="street" fieldlabel="Street Address" maxOccurs="1"]]
+,
+[[>:RDFBones_NameEntry_Snippet connects="<http://www.w3.org/2006/vcard/ns#hasAddress>" predicate="<http://www.w3.org/2006/vcard/ns#postalCode>" fieldID="post" fieldlabel="Postal Code" maxOccurs="1"]]      
+    ]'>
+<semantic-form-recover-notification></semantic-form-recover-notification>
+<semantic-form-text-input for="label">
+</semantic-form-text-input>
+<semantic-form-text-input for="firstname">
+</semantic-form-text-input>
+<semantic-form-text-input for="lastname">
+</semantic-form-text-input>
+<semantic-form-text-input for="email">
+</semantic-form-text-input>
+<semantic-form-text-input for="phone">
+</semantic-form-text-input>
+<semantic-form-text-input for="country">
+</semantic-form-text-input>
+<semantic-form-text-input for="city">
+</semantic-form-text-input>
+<semantic-form-text-input for="street">
+</semantic-form-text-input>
+<semantic-form-text-input for="post">
+</semantic-form-text-input>
+<button name="submit" class="btn btn-primary"><strong>Save</strong></button>
+<button name="reset" class="btn btn-secondary">Reset</button>
+</semantic-form>
+
+<br><br><hr>
+<semantic-update query='
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX dc: <http://purl.org/dc#>
+PREFIX vivo: <http://vivoweb.org/ontology/core#>
+PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
+PREFIX cidoc:<http://www.cidoc-crm.org/cidoc-crm/>
+
+DELETE {   
+      ?? a obo:NCBITaxon_9606 .
+      ?? rdfs:label ?value .
+      ?myself vivo:relates ?? .
+      ?myperson a dc:person .
+      ?myself a obo:ERO_0002036 .
+      ?myself vivo:relates ?myperson .
+      ?myperson vcard:hasName ?myname .
+      ?myperson a cidoc:E39 .
+      ?myname a vcard:Name .
+      ?myname vcard:givenName ?gname.
+      ?myname vcard:familyName ?fname.
+      ?myperson vcard:hasEmail ?myemail .
+      ?myemail a obo:IAO_0000429 .
+      ?myemail <http://purl.obolibrary.org/obo/IAO_0000115> ?emailaddr .
+      ?myperson vcard:hasTelephone ?myphone.
+      ?myphone a vcard:Telephone .
+      ?myphone <http://purl.obolibrary.org/obo/IAO_0000115> ?phonenr .
+      ?myperson vcard:hasAddress ?myaddress .
+      ?myaddress a vcard:Address.
+      ?myaddress <http://www.w3.org/2006/vcard/ns#country-name> ?country .
+      ?myaddress <http://www.w3.org/2006/vcard/ns#locality> ?city .
+      ?myaddress <http://www.w3.org/2006/vcard/ns#streetAddress> ?street .
+      ?myaddress <http://www.w3.org/2006/vcard/ns#postalCode> ?post .
+
+}
+WHERE {
+      ?? a obo:NCBITaxon_9606 .
+     
+      ?? rdfs:label ?value .
+       OPTIONAL {
+      ?myself vivo:relates ?? .
+      ?myself vivo:relates ?myperson .
+      ?myself a obo:ERO_0002036 .
+      ?myperson vcard:hasName ?myname .
+      }
+      OPTIONAL {
+      ?myname vcard:givenName ?gname.
+      }  
+      OPTIONAL {
+      ?myname vcard:familyName ?fname.
+      }   
+      ?myperson vcard:hasEmail ?myemail .
+      OPTIONAL {
+      ?myemail <http://purl.obolibrary.org/obo/IAO_0000115> ?emailaddr .
+      }   
+      ?myperson vcard:hasTelephone ?myphone .
+      OPTIONAL {
+      ?myphone <http://purl.obolibrary.org/obo/IAO_0000115> ?phonenr .
+      }   
+      ?myperson vcard:hasAddress ?myaddress . 
+      OPTIONAL {
+      ?myaddress <http://www.w3.org/2006/vcard/ns#country-name> ?country .
+      }   
+      OPTIONAL {
+      ?myaddress <http://www.w3.org/2006/vcard/ns#locality> ?city .
+      } 
+      OPTIONAL {
+      ?myaddress <http://www.w3.org/2006/vcard/ns#streetAddress> ?street .
+      }     
+      OPTIONAL {
+      ?myaddress <http://www.w3.org/2006/vcard/ns#postalCode> ?post .
+      }     
+   
+}',
+id="DeleteSkeleton"
+variable-params='["label", "myclass","myperson","myname","gname","myemail","myaddress", "value","myself","fname","emailaddr","myphone","phonenr","country","city","street","post"]'
+post-action="[[resolvePrefix ":RDFBones_NameEntry"]]"
+show-confirmation="true"
+confirmation-options='{
+     "message": "Do you really want to delete [[this.label]]?",
+     "confirmLabel": "Delete"
+   }'
+>
+
+<button class='btn btn-primary btn-danger'><span class='fa fa-trash' style='pointer-events: none;'></span>&nbsp; <strong>DELETE [[this.label]]</strong></button>
+</semantic-update>
+</div>
