@@ -1,0 +1,40 @@
+                     
+<style>
+#hide-after-time {
+    -webkit-animation: cssAnimation 5s forwards; 
+    animation: cssAnimation 5s forwards;
+}
+
+@keyframes cssAnimation {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+@-webkit-keyframes cssAnimation {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+</style>
+                      <mp-event-target-template-render id="[[ufb-id]]" template=" {{>[[ufbTemplate]]}} ">
+                        <template id="[[ufbTemplate]]">
+                          {{#if iri}} 
+                          <div id='hide-after-time' style='margin-top: 10px; '>
+                            <bs-alert variant="success">
+                              <strong>[[ufbname]] successfully updated !!!</strong><br>
+                              <!-- <strong>CAVEAT: Before changing these values again,
+                                <br> please reload the page.</strong>
+                              <br>
+                              This is only a temporary workaround. -->
+                            </bs-alert>
+                          </div>
+                            <!-- <div style='background-color:green; margin-top: 20px;flex: 1; padding: 0px 10px 10px 10px'>[[ufbname]] successfully updated !!!</div> -->
+                        <!--  {{else}}
+<div style='margin-top: 10px; '>
+                            <bs-alert variant="error">
+                              <strong> Updating [[ufbname]] failed !!!</strong>
+                            </bs-alert>
+                          </div> -->
+                          {{/if}} 
+                        </template>
+                      </mp-event-target-template-render>

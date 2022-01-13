@@ -1,0 +1,33 @@
+
+<mp-sparql-download query="
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX standards-si: <http://w3id.org/rdfbones/ext/standards-si/>
+
+SELECT DISTINCT ?ID ?ROI ?MeasurementType ?Measurement WHERE {
+              
+  					  ?? rdfs:label ?ID .
+  					  ?? obo:BFO_0000051 ?section.
+  					  ?section obo:BFO_0000051 ?md.	
+   					  ?md <http://purl.obolibrary.org/obo/IAO_0000136> ?myROIInstance .
+  					  ?myROIInstance a ?ROIClass .
+  					  ?ROIClass rdfs:label ?ROI .
+ 					    ?section a ?mysection. 
+  					  ?md a ?mdClass .
+  					  ?mdClass rdfs:label ?MeasurementType.
+  					  ?md <http://purl.obolibrary.org/obo/OBI_0001938> ?mdValueSpec.
+  					  ?mdValueSpec <http://purl.obolibrary.org/obo/OBI_0001937>|<http://purl.obolibrary.org/obo/OBI_0000999>  ?mystate.
+  					  OPTIONAL { Filter (exists {?mystate rdfs:label ?statelabel})
+    							?mystate rdfs:label ?statelabel .
+    				  			BIND(?statelabel as ?Measurement)
+  					 }
+ 						OPTIONAL { Filter (not exists {?mystate rdfs:label ?statelabel})
+    				  			BIND(?mystate as ?Measurement)
+  					 }
+  					
+                    } ORDER BY ?ID ?ROI ?mdClassLabel
+                    "
+header="text/csv" filename="[[this.label]].csv">
+  <button class="btn btn-secondary"><strong>Download CSV Table for <i>[[this.label]]</i></strong></button>
+</mp-sparql-download>
