@@ -1,0 +1,56 @@
+{
+    "id": "[[fieldID]]",
+    "label": "[[fieldlabel]]",
+    "maxOccurs": [[maxOccurs]],
+    "minOccurs": 1,
+    "insertPattern": "
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX dc: <http://purl.org/dc#>
+PREFIX vivo: <http://vivoweb.org/ontology/core#>
+PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
+INSERT {GRAPH ?mygraph {  
+      ?myname [[predicate]] $value
+
+      }
+} WHERE {
+      BIND(URI(STR(\"http://anthrograph.anthropologie.uni-freiburg.de-homo-sapiens-graph\")) AS ?mygraph ) .
+      ?myself vivo:relates ?subject.
+      ?myself vivo:relates ?myperson .
+      ?myperson [[connects]] ?myname .
+      
+    }"
+,
+"selectPattern":"
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX dc: <http://purl.org/dc#>
+PREFIX vivo: <http://vivoweb.org/ontology/core#>
+PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
+SELECT $value WHERE{
+  ?myself vivo:relates ?subject.
+  ?myself vivo:relates ?myperson .
+  ?myperson [[connects]] ?myname .
+  ?myname [[predicate]] $value
+      
+}", 
+
+"deletePattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
+    PREFIX vivo: <http://vivoweb.org/ontology/core#>
+
+    DELETE {
+    ?myname [[predicate]] $value .
+   
+    } WHERE {
+      ?myself vivo:relates ?subject .
+      ?myself vivo:relates ?myperson .
+      ?myperson [[connects]] ?myname .
+    } "
+ }

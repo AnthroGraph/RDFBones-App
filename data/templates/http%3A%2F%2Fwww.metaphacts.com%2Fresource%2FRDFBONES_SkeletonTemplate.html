@@ -1,0 +1,68 @@
+[[>:RDFBONES_SkeletalInventoryRelabelSnippet]]
+<div class="page" style="margin-left:30px; margin-right: 30px">
+
+[[>:RDFBONES_SkeletalInventoryGeneralInfo]]
+<!--
+<semantic-query 
+  query='
+   
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?test ?mysections ?label (count(?myparts) as ?count) WHERE {
+  ?? a ?test .
+  ?? <http://purl.obolibrary.org/obo/BFO_0000051> ?mysections .
+  ?mysections a ?class.
+  ?mysections <http://purl.obolibrary.org/obo/BFO_0000051> ?myparts.
+  ?class rdfs:label ?label
+
+  } GROUP BY ?test ?mysections ?label
+  ' 
+  template='{{> template1}}'
+>
+  <template id='template1'>
+      {{#each bindings}} 
+          <semantic-link uri="{{mysections.value}}">
+            <i class="fa" style="margin-right: 5px"></i> 
+            {{label.value}} {{count.value}}
+          </semantic-link> 
+      {{/each}}
+    
+  </template>
+</semantic-query>
+
+-->
+[[#if (ask 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {SELECT  ?mySI  WHERE {        ?? a ?mySI . }}') ]]
+<br><br>
+<div>
+<h4><strong>Available Sections: </strong></h4>
+<semantic-table 
+  query='
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?mysections ?label ?class (count(?myparts) as ?count) WHERE {
+  ?? a ?test .
+  ?? <http://purl.obolibrary.org/obo/BFO_0000051> ?mysections .
+  ?mysections a ?class.
+  ?mysections <http://purl.obolibrary.org/obo/BFO_0000051> ?myparts.
+  ?class rdfs:label ?label .
+  
+
+  } GROUP BY ?mysections ?label ?class
+  '
+  column-configuration='[
+    
+                        {    
+  	"variableName": "class", 
+  	 "cellTemplate": "<semantic-link uri={{mysections.value}}>{{label.value}} </semantic-link>"
+                        , "displayName": "Section"
+    },
+    
+  	{"variableName": "count", "displayName": "No of Items"}
+  	
+                        
+  ]'
+></semantic-table>
+</div>
+
+[[/if]]
+</div>

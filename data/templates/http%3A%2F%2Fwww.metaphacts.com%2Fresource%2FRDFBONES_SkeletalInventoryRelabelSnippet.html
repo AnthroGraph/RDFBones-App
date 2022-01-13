@@ -1,0 +1,143 @@
+<div class="page" style="margin-left:30px; margin-right: 30px"> 
+
+<h4><img src="../assets/images/skull.png" alt="Skull" height="40">&nbsp;
+<a href="RDFBONES_SkeletalInventories"><span class='fa fa-arrow-right' style='pointer-events: none;'></span>&nbsp; <strong> Browse All Skeletal Inventories</strong></a> 
+</h4>
+<br>
+[[#if (ask 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {SELECT  ?mySI  WHERE {        ?? a ?mySI . }}') ]]
+ <!--> <h4>Inventory ID: <strong>[[this.label]]</strong> </h4> -->
+
+
+<!-- <h4><strong>Change Skeletal Inventory ID: </strong> </h4> -->
+<semantic-form
+          id="rename-skeleton"
+          post-action='event'
+          persistence='sparql'
+          form-id='rename-skeleton'
+          subject='[[this]]'
+          fields='[
+            {
+              "id": "name",
+              "label": "Skeletal Inventory ID",
+              "xsdDatatype": "xsd:string",
+              "minOccurs": "1",
+              "maxOccurs": "1",
+              "selectPattern": "SELECT $value WHERE { $subject <http://www.w3.org/2000/01/rdf-schema#label> $value }",
+              "valueSetPattern": "SELECT $value WHERE {
+                ?subject <http://www.w3.org/2000/01/rdf-schema#label> ?value
+                }", 
+              "insertPattern": "INSERT {GRAPH ?mygraph {?subject <http://www.w3.org/2000/01/rdf-schema#label> $value }} WHERE {
+                GRAPH ?mygraph {?subject a ?o } 
+
+              }",
+              "deletePattern": "DELETE {?subject <http://www.w3.org/2000/01/rdf-schema#label> ?value} WHERE {}", 
+              "constraints": [{
+                 "validatePattern":"
+                         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                         ASK WHERE { FILTER NOT EXISTS {
+   									         	?s rdfs:label $value.
+  				                    ?s a ?myclass .
+                              ?myclass rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton>.
+  											    }}",
+                  "message": "Label already exists"
+                  }]
+             
+
+            
+            }]'
+          >
+<semantic-form-text-input for="name"></semantic-form-text-input>
+   <button name="submit" class="btn btn-primary"><strong>Change Skeletal Inventory ID</strong></button>
+    <button name="reset" class="btn btn-secondary">Reset</button>
+   [[>:PSI_FormSuccessFeedbackTemplateSnippet ufb-id="show-after-rename-skeleton-update" ufbTemplate="rename-skeleton-Template" ufbname="Label"]]
+</semantic-form>
+[[>:PSI_FormSuccessFeedbackEventSnippet event-source="rename-skeleton" event-target="show-after-rename-skeleton-update"]]
+
+<br>
+<semantic-update query='
+PREFIX : <http://www.metaphacts.com/resource/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfbones: <http://w3id.org/rdfbones/core#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fma: <http://purl.org/sig/ont/fma/>
+DELETE { GRAPH ?mygraph {?s ?p ?o }} WHERE {
+          SELECT ?mygraph ?s ?p ?o WHERE {
+            GRAPH ?mygraph {
+            ?? a ?mytype .
+            ?s ?p ?o .
+          }
+        }
+      }
+'
+id="DeleteSkeleton"
+variable-params='["mygraph","s","o","p","mytype"]'
+post-action="[[resolvePrefix ":RDFBONES_SkeletalInventories"]]"
+show-confirmation="true"
+confirmation-options='{
+     "message": "Do you really want to delete this Skeletal Inventory and all associated data?",
+     "confirmLabel": "Delete"
+   }'
+>
+
+<button class='btn btn-primary btn-danger'><span class='fa fa-trash' style='pointer-events: none;'></span>&nbsp; <strong>DELETE Entire Skeletal Inventory</strong></button>
+</semantic-update>
+[[else]]
+Skeletal Inventory [[this.label]] has been successfully deleted.
+[[/if]]
+<hr>
+[[>:PSI_ExportSnippet]]
+</div>
+
+
+<!-- Old Delete statement 
+DELETE {   
+   ??  a ?myclass .
+   ?? rdfs:label ?label .
+   ?mysectionInstance a ?mysections .
+   ?? <http://purl.obolibrary.org/obo/BFO_0000051> ?mysectionInstance .
+   ?myROIInstance a ?myparts . ## generate ROI Instances
+   ?myinstance4s a ?rep4state . ## generate rep4state instances
+   ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?myROIInstance .
+   ?mysectionInstance <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s . ## connect section to a 4state instance
+   ?myinstance4svaluespec a ?r4svs .
+   ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+   ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?state.
+   ?myBoneInstance2 a ?pp2.
+   ?myROIInstance fma:regional_part_of ?myBoneInstance2 .
+  
+   ?myROIInstance2 a ?pp3.
+   ?myROIInstance fma:regional_part ?myROIInstance2 .
+   ?myBoneInstance4 a ?pp4.
+   ?myROIInstance2 fma:regional_part_of ?myBoneInstance4 .  
+}
+WHERE {
+    
+  ?? rdfs:label ?label .
+  ?? a ?myclass .
+  ?? <http://purl.obolibrary.org/obo/BFO_0000051> ?mysectionInstance .
+  ?mysectionInstance <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s .
+  ?mysectionInstance a ?mysections .
+  ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?myROIInstance .
+  ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+  ?myinstance4svaluespec a ?r4svs .
+  OPTIONAL { ?myinstance4svaluespec ?ConnectValue ?state. }
+  ?myROIInstance a ?myparts .
+  ?myinstance4s a ?rep4state .
+    
+  OPTIONAL{
+  ?myROIInstance fma:regional_part_of ?myBoneInstance2 .
+  ?myBoneInstance2 a ?pp2.
+  }
+  OPTIONAL {
+  ?myROIInstance fma:regional_part ?myROIInstance2 .
+  ?myROIInstance2 a ?pp3.
+  ?myROIInstance2 fma:regional_part_of ?myBoneInstance4 .
+  ?myBoneInstance4 a ?pp4.
+    
+  }  
+}
+variable-params='["mysectionInstance", "mysections", "label", "myclass", "myROIInstance", "myparts", "myinstance4s", "rep4state", "myinstance4svaluespec", "r4svs", "state", "myBoneInstance2", "pp2", "myROIInstance2", "pp3", "myBoneInstance4", "pp4", "myRS0", "myRS", "pp1", "mi", "myRS2", "o1", "myRS3", "myRS4", "l4", "myRS5", "myRS6", "myRS6a", "ConnectValue"]'
+-->

@@ -1,0 +1,97 @@
+<div class="page" style="margin-left:30px; margin-right: 30px">
+<semantic-form
+for-class="http://purl.obolibrary.org/obo/NCBITaxon_9606" 
+new-subject-template="http://rdfbones-homo-sapiens.org/records/{{UUID}}"
+post-action='redirect'
+persistence='sparql'
+
+fields='[{
+    "id": "name",
+    "label": "Register a new inventory creator",
+    "maxOccurs": 1,
+    "minOccurs": 1,
+    "insertPattern": "
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX dc: <http://purl.org/dc#>
+PREFIX vivo: <http://vivoweb.org/ontology/core#>
+PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
+PREFIX cidoc:<http://www.cidoc-crm.org/cidoc-crm/>
+INSERT {GRAPH ?mygraph {  
+      ?subject rdf:type obo:NCBITaxon_9606 .
+      ?subject rdfs:label ?value .
+      ?myperson a cidoc:E39 .
+      ?myself a obo:ERO_0002036 .
+      ?myself vivo:relates ?subject.
+      ?myself vivo:relates ?myperson .
+      ?myperson vcard:hasName ?myname .
+      ?myname a vcard:Name .
+      ?myperson vcard:hasEmail ?myemail .
+      ?myemail a obo:IAO_0000429 .
+      ?myperson vcard:hasAddress ?myaddress .
+      ?myadress a vcard:Address.
+      ?myperson vcard:hasTelephone ?myphone.
+      ?myphone a vcard:Telephone .
+
+      }
+} WHERE {
+    BIND(URI(STR(\"http://anthrograph.anthropologie.uni-freiburg.de-homo-sapiens-graph\")) AS ?mygraph ) .
+    BIND(URI(CONCAT(STR(?subject),\"_person\")) AS ?myperson ) .
+    BIND(URI(CONCAT(STR(?subject),\"_self\")) AS ?myself ) .
+    BIND(URI(CONCAT(STR(?subject),\"_name\")) AS ?myname ) .
+    BIND(URI(CONCAT(STR(?subject),\"_email\")) AS ?myemail ) .
+    BIND(URI(CONCAT(STR(?subject),\"_address\")) AS ?myaddress ) .
+    BIND(URI(CONCAT(STR(?subject),\"_phone\")) AS ?myphone ) .
+
+    }"
+,
+
+
+"deletePattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    DELETE {
+    ?subject  rdf:type obo:NCBITaxon_9606 .
+    ?subject rdfs:label ?value .
+    } WHERE {} ",
+
+"constraints": [{
+                 "validatePattern":"
+                         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                         PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+                         ASK WHERE { FILTER NOT EXISTS {
+   									         	?s rdfs:label $value.
+  				                    ?s a obo:NCBITaxon_9606 .
+                              
+  											    }}",
+                  "message": "Label already exists"
+                  }]
+    }]'>
+
+<semantic-form-text-input for="name"></semantic-form-text-input>
+<button name="submit" class="btn btn-primary"><strong>Save</strong></button>
+    <button name="reset" class="btn btn-secondary">Reset</button>
+</semantic-form>
+
+
+<br><br>
+<h3>Show all available Homo Sapiens instances:</hr>
+<semantic-table 
+  query="
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX obo: <http://purl.obolibrary.org/obo/>
+SELECT ?person ?value WHERE { 
+?person rdf:type obo:NCBITaxon_9606 .
+?person rdfs:label ?value .
+}  "
+  column-configuration='[
+    {"variableName": "person", "displayName": "Subject"}
+  ]'
+></semantic-table>
+</div>

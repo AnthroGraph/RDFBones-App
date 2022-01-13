@@ -1,0 +1,44 @@
+{{#> Help:StartFrameTocUi tocItemId="Skeletal_Inventories"}}
+
+<div class="page" style="margin-left:50px; margin-right: 50px; margin-top: 0px"> 
+  
+<h2><img src="../assets/images/skull.png" alt="Skull"  height="40">&nbsp; Browse Skeletal Inventories</h2>
+  
+  [[#if (ask 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {SELECT  ?mySI  WHERE {        ?myclasses rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton> .  ?mySI a ?myclasses . }}')]]
+  
+<semantic-table 
+  query='
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX dc: <http://purl.org/dc#>
+      SELECT  ?mySI ?myclasses ?mydate ?mycreator WHERE {
+        ?myclasses rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton> .
+        ?mySI a ?myclasses .
+        OPTIONAL {?mySI dc:creator ?mycreator} .
+        OPTIONAL {?mySI dc:date ?mydate} .
+
+
+ } '
+  number-of-displayed-rows=5
+  column-configuration='[
+   
+    {"variableName": "mySI", "displayName": "Inventory"},
+    {"variableName": "myclasses", "displayName": "Class"},
+    {"variableName": "mycreator", "displayName": "Created by"},
+    {"variableName": "mydate", "displayName": "Created on"}
+                     
+  ]'
+></semantic-table>
+[[else]]
+  <div>
+    No Skeletal Inventories in Database yet. You can add some below.
+  </div>
+[[/if]]
+
+<br>
+
+
+[[>:CreateCompleteSkeleton]]
+
+</div>
+{{/Help:StartFrameTocUi}}

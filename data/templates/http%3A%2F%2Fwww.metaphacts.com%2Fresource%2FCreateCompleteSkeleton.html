@@ -1,0 +1,152 @@
+<h2><img
+    src="../assets/images/skull.png"
+    alt="Skull"
+    height="40"
+  >&nbsp; Create a New Skeletal Inventory Including All Bone Instances</h2>
+
+
+<semantic-form
+  new-subject-template='http://www.semanticweb.org/engel/ontologies/2020/10/SkeletalInventory/instances/{{ofType}}-{{UUID}}'
+  persistence='sparql'
+  post-action='redirect'
+  form-id='Skeleton'
+  fields='[
+            {
+              "id": "name",
+              "label": "Skeletal Inventory ID",
+              "xsdDatatype": "xsd:string",
+              "minOccurs": "1",
+              "maxOccurs": "1",
+              "insertPattern": "INSERT {GRAPH ?mygraph { $subject rdfs:label ?value }} WHERE {
+                BIND(URI(CONCAT(STR(?subject),\"-graph\")) AS ?mygraph ) .
+              }",
+              "deletePattern": "DELETE { $subject rdfs:label ?value } WHERE {}",
+              "constraints": [{
+                 "validatePattern":"
+                         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                         ASK WHERE { FILTER NOT EXISTS {
+   									         	?s rdfs:label ?value.
+  				                    ?s a ?myclass .
+                              ?myclass rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton>.
+  											    }}",
+                  "message": "Label already exists"
+                  }]
+            } , {
+              "id": "ofType",
+              "label": "Type",
+              "minOccurs": "1",
+              "maxOccurs": "1",
+              "insertPattern": "                  
+                  PREFIX obo: <http://purl.obolibrary.org/obo/>
+                  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                  PREFIX rdfbones: <http://w3id.org/rdfbones/core#>
+                  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+                  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+                  PREFIX fma: <http://purl.org/sig/ont/fma/>
+                
+                  INSERT {GRAPH ?mygraph {
+                   ?subject a ?value .
+                   ?mySpecimen a rdfbones:HumanSkeletonSpecimen.
+                   ?subject <http://semanticscience.org/resource/SIO_000563> ?mySpecimen.
+                   ?mysectionInstance a ?mysections .
+                   ?subject <http://purl.obolibrary.org/obo/BFO_0000051> ?mysectionInstance .
+                   ?myROIInstance a ?myparts . 
+                   ?myinstance4s a ?rep4state . 
+                   ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?myROIInstance .
+                   ?mysectionInstance <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s . 
+                   ?myinstance4svaluespec a ?r4svs .
+                   ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+                  
+                  
+                  ?myBoneInstance2 a ?pp2.
+                  ?myROIInstance fma:regional_part_of ?myBoneInstance2 .
+  
+                  ?myROIInstance2 a ?pp3.
+                  ?myROIInstance fma:regional_part ?myROIInstance2 .
+                  ?myBoneInstance4 a ?pp4.
+                  ?myROIInstance2 fma:regional_part_of ?myBoneInstance4 .  
+                   
+                  
+                 }} WHERE {
+                    BIND(URI(CONCAT(STR(?subject),\"-graph\")) AS ?mygraph )
+                    ?value rdfs:subClassOf ?myRS0 .
+                    ?myRS0 a owl:Restriction ;
+                    owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                                   (owl:someValuesFrom|owl:onClass) ?mysections .
+                    
+                    ?mysections rdfs:subClassOf ?myRS .
+                    ?myRS a owl:Restriction ;
+                 		      owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                          owl:someValuesFrom ?pp1 .
+                    ?pp1 owl:intersectionOf ?mi.
+                    ?mi rdf:first ?rep4state ; 
+                    rdf:rest ?myRS2list . 
+
+                    ?rep4state rdfs:label ?rep4stateLabel.
+   
+   									?myRS2list rdf:first ?myRS2 .
+   									?myRS2 a owl:Restriction ;
+  	 							         owl:onProperty <http://purl.obolibrary.org/obo/IAO_0000136> ;
+     							         owl:onClass ?myparts .
+                  
+                    ?rep4state rdfs:subClassOf ?myRS3. 
+                    ?myRS3 a owl:Restriction ; 
+                    owl:onProperty <http://purl.obolibrary.org/obo/OBI_0001938> ;
+                    owl:allValuesFrom  ?r4svs. 
+  
+                    ?r4svs rdfs:subClassOf ?myRS4 .
+                    
+
+                        OPTIONAL {
+                        ?myparts rdfs:subClassOf ?myRS5.
+                        ?myRS5 a owl:Restriction ;
+                        owl:onProperty fma:regional_part_of;
+                        (owl:someValuesFrom|owl:allValuesFrom) ?pp2 .
+                        }
+                        OPTIONAL {
+                        ?myparts rdfs:subClassOf ?myRS6.
+                        ?myRS6 a owl:Restriction ;
+                        owl:onProperty fma:regional_part;
+                        (owl:someValuesFrom|owl:allValuesFrom) ?pp3 .
+                        
+                        ?pp3 rdfs:subClassOf ?myRS6a.
+                        ?myRS6a a owl:Restriction ;
+                        owl:onProperty fma:regional_part_of;
+                        (owl:someValuesFrom|owl:allValuesFrom) ?pp4 .
+                        }
+                  
+                    BIND(STR(?mysections) AS ?mySectionID) .
+ 								    BIND(URI(CONCAT(STR(?subject),\"-\",?mySectionID)) AS ?mysectionInstance) .
+                    BIND(STR(?myparts) AS ?myid) .
+                    BIND(URI(CONCAT(STR(?subject),\"-Specimen\")) AS ?mySpecimen) .
+                    BIND(URI(CONCAT(STR(?subject),\"-\",?myid)) AS ?myROIInstance) .
+                    BIND(URI(CONCAT(STR(?subject),\"-\",STR(?rep4state),\"-\",STR(?myparts))) AS ?myinstance4s) .
+                    BIND(URI(CONCAT(STR(?subject),\"-\",STR(?rep4state),\"-\",STR(?myparts),\"-valuespec\")) AS ?myinstance4svaluespec) .
+                    BIND(URI(CONCAT(STR(?subject),\"-\",STR(?pp2))) AS ?myBoneInstance2) .
+                    BIND(URI(CONCAT(STR(?subject),\"-\",STR(?pp3))) AS ?myROIInstance2) .
+                    BIND(URI(CONCAT(STR(?subject),\"-\",STR(?pp4))) AS ?myBoneInstance4) .
+                    
+ 									
+}",
+        "valueSetPattern" : "
+         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+         SELECT ?value WHERE {
+         ?value rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton> .
+        }",
+       "deletePattern": "DELETE { $subject :bogus :mybogus} WHERE {}" 
+                  }
+        ]'
+>
+  <semantic-form-text-input for="name"></semantic-form-text-input>
+  <semantic-form-select-input for='ofType'> </semantic-form-select-input>
+
+
+  <button
+    name="submit"
+    class="btn btn-default"
+  >Save</button>
+  <button
+    name="reset"
+    class="btn btn-default"
+  >Reset</button>
+</semantic-form>

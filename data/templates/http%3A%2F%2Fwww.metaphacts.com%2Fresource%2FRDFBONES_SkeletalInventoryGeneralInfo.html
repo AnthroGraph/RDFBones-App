@@ -1,0 +1,118 @@
+<!-- Enter Creator -->
+
+<semantic-form
+subject='[[this]]'
+id="creator-skeleton"
+post-action='event'
+persistence='sparql'
+form-id='creator-skeleton'
+fields='[
+  {
+  
+    "id": "creatorentry",
+    "label": "Creator of inventory",
+    "minOccurs": "1",
+
+    "selectPattern":"
+    PREFIX dc: <http://purl.org/dc#>
+    SELECT $value  WHERE {
+      $subject dc:creator $value 
+     
+}",
+    "valueSetPattern": "
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    SELECT $value WHERE {
+                $value rdf:type obo:NCBITaxon_9606
+                }", 
+    
+    "insertPattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    INSERT {GRAPH ?mygraph {$subject dc:creator $value }} WHERE {
+      GRAPH ?mygraph {$subject a ?o} 
+
+}",
+    "deletePattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    DELETE {$subject dc:creator $value} WHERE { 
+}"
+},
+{
+ "id": "dateentry",
+    "label": "Date of inventory creation",
+    "minOccurs": 1,
+    "maxOccurs": 1,
+    "xsdDatatype": "xsd:date",
+    "selectPattern":"
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT $value  WHERE {
+      $subject dc:date $value .
+     
+}",
+    "valueSetPattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    SELECT $value WHERE {
+                ?subject dc:date ?value
+                }", 
+    
+    "insertPattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    INSERT {GRAPH ?mygraph {$subject dc:date $value }} WHERE {
+      GRAPH ?mygraph {$subject a ?o } 
+
+}",
+    "deletePattern": "
+    PREFIX dc: <http://purl.org/dc#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    DELETE {$subject dc:date $value} WHERE { 
+}"
+},
+{
+  
+    "id": "commententry",
+    "label": "Comment concerning this inventory (optional)",
+    "minOccurs": "0",
+    "maxOccurs": "1",
+
+    "selectPattern":"
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  
+    SELECT $value  WHERE {
+      $subject rdfs:comment $value .
+     
+}",
+    "valueSetPattern": "
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  
+    SELECT $value WHERE {
+                $subject rdfs:comment $value .
+}", 
+    
+    "insertPattern": "
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    INSERT {GRAPH ?mygraph { $subject rdfs:comment $value }} WHERE {
+      GRAPH ?mygraph {$subject a ?o } 
+}",
+
+    "deletePattern": "
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  
+    DELETE {$subject rdfs:comment $value} WHERE { 
+}"
+    }]'>
+
+<semantic-form-select-input for="creatorentry">
+</semantic-form-select-input>
+<semantic-form-datetime-input for="dateentry" mode="date" >
+</semantic-form-datetime-input>
+<semantic-form-text-input for="commententry" multiline="true">
+</semantic-form-text-input>
+      <button
+        name="submit"
+        class="btn btn-secondary  btn-sm"
+      >Save</button>
+     [[>:PSI_FormSuccessFeedbackTemplateSnippet ufb-id="show-after-general-update" ufbTemplate="general-Template" ufbname="General Information"]]
+</semantic-form>
+  <!-- user feedback on form update -->
+            [[>:PSI_FormSuccessFeedbackEventSnippet event-source="creator-skeleton" event-target="show-after-general-update"]]
+<hr>

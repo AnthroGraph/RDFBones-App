@@ -1,0 +1,326 @@
+<div
+  class="page"
+  style="margin-left:30px; margin-right: 30px"
+>
+
+  <!-- My IRI = [[this]]-->
+
+  <semantic-query
+    query='
+	 
+	 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+	 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+	 SELECT ?SIlabel ?mySI ?SIclasslabel ?classlabel WHERE {
+	 ?mySI <http://purl.obolibrary.org/obo/BFO_0000051> ?? .
+	 ?mySI rdfs:label ?SIlabel .
+   ?mySI a ?mySIclass .
+   OPTIONAL {?mySIclass rdfs:label ?SIclasslabel .}
+    ?? a ?myclass .
+    OPTIONAL {?myclass rdfs:label ?classlabel .}
+	 }
+	 '
+    template='{{> template}}'
+  >
+    <template id='template'>
+
+      <h3><img
+          src="../assets/images/skull.png"
+          alt="Skull"
+          height="30"
+        >&nbsp;
+        {{#each bindings}}
+        Currently editing Skeletal Inventory:
+        <semantic-link uri="{{mySI.value}}">
+          <i
+            class="fa"
+            style="margin-right: 5px"
+          ></i>
+          {{SIlabel.value}} ({{SIclasslabel.value}})
+        </semantic-link>&nbsp;<img
+          src="../assets/images/skull.png"
+          alt="Skull"
+          height="30"
+        >
+        <br> Section <strong>{{classlabel.value}}</strong>
+
+        {{/each}}
+      </h3>
+
+    </template>
+  </semantic-query>
+  <br><br>
+  <!--
+    <semantic-update 
+    post-action="reload"
+    query='
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX psi: <http://w3id.org/rdfbones/ext/standards-si/>
+    PREFIX rdfbones: <http://w3id.org/rdfbones/core#>
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+    INSERT { ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value.  } 
+    WHERE {
+    
+    ?? <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s . 
+    ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+    
+    ?? rdfs:subClassOf ?myRS .
+    ?myRS a owl:Restriction ;
+    owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+    owl:someValuesFrom ?pp1 .
+    ?pp1 owl:intersectionOf ?mi.
+    ?mi rdf:first ?mystates .
+    
+    ?mystates rdfs:subClassOf ?myRS3. 
+    ?myRS3 a owl:Restriction ; 
+    owl:allValuesFrom  ?r4svs.
+    
+    ?r4svs rdfs:subClassOf ?myRS4 .
+    ?myRS4 a owl:Restriction ;
+    owl:onProperty ?rs4prop ;
+    owl:allValuesFrom  ?l4.
+    ?value a ?l4 .
+    ?state a ?l4 .
+    filter(CONTAINS(STR(?state),"missing"))
+    } '
+    variable-params='["myinstance4s","r4svs","myinstance4svaluespec", "value", "myRS", "pp1", "mi", "mystates", "myRS3", "myRS4", "rs4prop", "l4", "state"]'
+    
+    >
+      <button class='btn btn-primary'>Reset to Missing</button>
+    </semantic-update>
+    
+    -->
+
+
+  <!-- <semantic-query 
+  query='
+	 
+	 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+	 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+	 SELECT ?SIlabel ?mySI ?classlabel WHERE {
+   ?? a ?myclass .
+    ?myclass rdfs:label ?classlabel .
+	 ?mySI <http://purl.obolibrary.org/obo/BFO_0000051> ?? .
+	 ?mySI rdfs:label ?SIlabel .
+	 } 
+	 ' 
+  template='{{> template}}'
+  >
+  <template id='template'>
+    <h3>
+      {{#each bindings}}
+      Rate Entire Section: {{classlabel.value}}
+      <semantic-link uri="{{mySI.value}}">
+        <i class="fa" style="margin-right: 5px"></i> 
+        {{test.value}}
+      </semantic-link>
+      
+      {{/each}}
+    </h3>
+  </template>
+</semantic-query>
+-->
+  <h3><strong>Rate Entire Section</strong></h3>
+  <semantic-form
+    persistence='sparql'
+    post-action='reload'
+    browser-persistence=true
+    form-id='rateAll'
+    subject='[[this]]'
+    fields='[
+              {
+              "id": "rateAll",
+              "label": "Rate the entire Section",
+              "description": "All ratings are set globally. CAVEAT: You have to change all instances once to reset all values",
+              "minOccurs": "1",
+              "maxOccurs": "1",
+
+              "selectPattern":"SELECT ?value  WHERE {
+	      SELECT ?value (COUNT(?value) AS ?count)
+	      WHERE {
+	      ?subject <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s .
+	      ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+	      ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value.
+              } GROUP BY ?value 
+              } ORDER BY DESC(?count) LIMIT 1",
+              
+              "insertPattern": "
+              INSERT {GRAPH ?mygraph
+              	{
+              		?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value.  }} 
+              	WHERE {
+                  GRAPH ?mygraph {?mySI a ?o } 
+                  ?mySI <http://purl.obolibrary.org/obo/BFO_0000051> ?? .
+              		?subject <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s . 
+              		?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.}
+              ",
+              
+              "deletePattern": "DELETE { ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?any . } WHERE {
+	      SERVICE Repository:default {
+              ?subject <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s .
+              ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+              ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?any.
+              }
+              }",                    
+	      
+              "valueSetPattern": "
+              PREFIX owl: <http://www.w3.org/2002/07/owl#>
+	            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+              PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>      
+	      SELECT DISTINCT ?value WHERE {
+          ?? a ?myclass .
+	        ?myclass rdfs:subClassOf ?myRS .
+   	      ?myRS a owl:Restriction ;
+   	      owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+              owl:someValuesFrom ?pp1 .
+   	      ?pp1 owl:intersectionOf ?mi.
+   	      ?mi rdf:first ?mystates .
+     	      
+  	      ?mystates rdfs:subClassOf ?myRS3. 
+  	      ?myRS3 a owl:Restriction ; 
+	      owl:allValuesFrom  ?r4svs.
+	      
+  	      ?r4svs rdfs:subClassOf ?myRS4 .
+  	      ?myRS4 a owl:Restriction ;
+              owl:onProperty ?rs4prop ;
+              owl:allValuesFrom  ?l4.
+  	      ?value a ?l4 .
+              } ORDER  BY DESC(?value)"
+	      
+              }
+	      ]'
+  >
+
+    <bs-panel>
+      <semantic-form-recover-notification></semantic-form-recover-notification>
+      <semantic-form-checklist-input
+        for='rateAll'
+        type='radio'
+        row='true'
+      >
+      </semantic-form-checklist-input>
+      <button
+        name="submit"
+        class="btn btn-secondary  btn-sm"
+      >Save</button>
+
+      <semantic-form-errors></semantic-form-errors>
+
+    </bs-panel>
+
+  </semantic-form>
+  <hr>
+  <h3><strong>Rate Individual Parts</strong></h3>
+
+
+  <semantic-query
+    query='
+			   PREFIX obo: <http://purl.obolibrary.org/obo/>
+			   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+			   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+			   PREFIX rdfbones: <http://w3id.org/rdfbones/core#>
+			   PREFIX owl: <http://www.w3.org/2002/07/owl#>
+			   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+			   SELECT ?instance ?label ?mySIlabel WHERE {
+			   ?mySI <http://purl.obolibrary.org/obo/BFO_0000051> ?? .
+			    OPTIONAL {?mySI rdfs:label ?mySIlabel .}
+			   ?? <http://purl.obolibrary.org/obo/BFO_0000051> ?myinstance4s .
+			   ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?instance .
+			   ?instance a ?myclass. 
+			   OPTIONAL {?myclass rdfs:label ?label .    }
+			   } ORDER BY ?label'
+    template=' {{> forms}} '
+  >
+    <template id='forms'>
+      {{#each bindings}}
+      <semantic-form
+        persistence='sparql'
+        post-action='none'
+        browser-persistence=true
+        form-id='rating-{{@index}}'
+        subject='{{instance.value}}'
+        fields='[
+		  {
+		  "id": "rating",
+		  "label": "Rating for {{label.value}}",
+		  "xsdDatatype": "xsd:integer",
+		  "minOccurs": "1",
+		  "maxOccurs": "1",
+		  "selectPattern": "
+		  SELECT ?value WHERE {
+		  ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?subject .
+  		  ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+  		  ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value.
+		  }",
+		  
+		  "insertPattern": "INSERT  {GRAPH ?mygraph
+                     { ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value. }
+                  } 
+                  WHERE {
+                  ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?subject .
+                  ?mySI <http://purl.obolibrary.org/obo/BFO_0000051> ?? .
+                  GRAPH ?mygraph {?mySI a ?o } 
+  		  ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+                  }",
+		  
+		  "deletePattern": "DELETE { ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value. } 
+                  WHERE {
+                  ?myinstance4s <http://purl.obolibrary.org/obo/IAO_0000136> ?subject .
+  		  ?myinstance4s <http://purl.obolibrary.org/obo/OBI_0001938> ?myinstance4svaluespec.
+                  ?myinstance4svaluespec <http://purl.obolibrary.org/obo/OBI_0000999> ?value.
+
+                  }",
+		  "valueSetPattern": "
+      PREFIX owl: <http://www.w3.org/2002/07/owl#>
+		  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+		  SELECT DISTINCT ?value WHERE {
+        ?? a ?myclass .
+	      ?myclass rdfs:subClassOf ?myRS .
+   	    ?myRS a owl:Restriction ;
+   	          owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+              owl:someValuesFrom ?pp1 .
+   	    ?pp1 owl:intersectionOf ?mi.
+   	    ?mi rdf:first ?mystates .
+     	      
+  	    ?mystates rdfs:subClassOf ?myRS3. 
+  	    ?myRS3 a owl:Restriction ; 
+	      owl:allValuesFrom  ?r4svs.
+	      
+  	    ?r4svs rdfs:subClassOf ?myRS4 .
+  	    ?myRS4 a owl:Restriction ;
+               owl:onProperty ?rs4prop ;
+               owl:allValuesFrom  ?l4.
+  	    ?value a ?l4 .
+        } ORDER  BY DESC(?value)
+                  "
+		  }
+		  ]'
+      >
+        <bs-panel>
+
+          <semantic-form-recover-notification></semantic-form-recover-notification>
+          <semantic-form-checklist-input
+            for='rating'
+            type='radio'
+            row='true'
+          >
+          </semantic-form-checklist-input>
+          <semantic-form-errors></semantic-form-errors>
+          <button
+            name="submit"
+            class="btn btn-secondary  btn-sm"
+            data-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+          >Save</button>
+
+        </bs-panel>
+      </semantic-form>
+      {{/each}}
+    </template>
+
+  </semantic-query>
+</div>

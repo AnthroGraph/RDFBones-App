@@ -1,0 +1,273 @@
+[[!--
+Interface of the file
+======================================================================
+Include this file using front-end include^
+{{#> Help:StartFrameTocUi tocItemId="..."}}
+  <h1>Page body</h1>
+{{/Help:StartFrameTocUi}}
+Use "tocItemId" parameter to define an ID of active tab
+======================================================================
+--]]
+
+[[> Help:HelpStylesInclude]]
+[[> Help:ProductSupportIcon]]
+
+<!-- Common styles -->
+<style>
+  .sidebar-container {
+    min-width: 250px;
+  }
+  .toc-sublist {
+    padding-top: 0;
+  }
+
+  .toc-sublist {
+    margin-left: 14px;
+    padding-left: 6px;
+  }
+
+  .help-panel{
+    min-width:200px!important;
+  }
+</style>
+
+<!-- Nav tabs styles -->
+<style>
+  .nav-tabs>li.active>a,
+  .nav-tabs>li.active>a:focus,
+  .nav-tabs>li.active>a:hover,
+  .nav.nav-tabs.nav-stacked,
+  .nav-tabs>li:hover {
+    border: 0px
+  }
+
+  .sidebar {
+    top: 150px;
+    position: fixed;
+  }
+
+  .nav-tabs>li>a:hover {
+    background-color: inherit;
+    width: inherit;
+    border-color: rgb(249, 249, 249)
+  }
+
+  .nav-tabs>li.active>a,
+  .nav-tabs>li.active>a:hover,
+  .nav-tabs>li.active>a:focus {
+    color: #6f6f6f;
+    width: inherit;
+    background-color: inherit;
+    cursor: default;
+  }
+
+  .nav-stacked>li+li {
+    width: inherit
+  }
+
+  .nav-tabs {
+    width: max-content
+  }
+</style>
+
+<!-- Tutorial styles -->
+<style>
+  .infoBox {
+    margin: 1rem 0;
+    background-color: #f3f3f3;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .infoBox__icon {
+    border: 3px solid #c0c0c0;
+    border-radius: 50%;
+    height: 50px;
+    flex: 0 0 50px;
+    font-size: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c0c0c0;
+    margin: 1rem;
+  }
+
+  .infoBox__content {
+    margin: 1rem 1rem 1rem 0;
+    flex: 1;
+  }
+
+  .tutorialNavigation {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+
+  .tutorialNavigation__previous {
+    padding-left: 0;
+  }
+
+  .tutorialNavigation__next {
+    padding-right: 0;
+  }
+
+  .tutorialNavigation__previous::before {
+    content: '<';
+    margin-right: 5px;
+  }
+
+  .tutorialNavigation__next::after {
+    content: '>';
+    margin-left: 5px;
+  }
+
+  .tutorialTabContent>.tutorialNavigationNav {
+    display: none;
+  }
+
+  .tutorialTabContent>.active+.tutorialNavigationNav {
+    display: block;
+  }
+
+  .tutorialTabContent img {
+    box-shadow: 10px 15px 26px 0px #7F7F7F;
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .toc-sublist a[data-rb-event-key="{{page-resource}}"] {
+    color: #495057;
+    background-color: #fff;
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<ol class="page-breadcrumb">
+  Getting started with metaphactory <span class="badge" style=" font-size: 13px">4.4.0</span>
+</ol>
+
+<div class="page">
+  <div class="ml-5 mt-5 mr-5">
+    <div data-flex-layout="rows top-center">
+      <div class="sidebar-container d-none d-lg-block" data-flex-self="size-x1 left">
+
+          <bs-tab-container
+            id="some-ide"
+            class="bs-left-vertical-tabs"
+            default-active-key='{{#if tocItemId}}{{tocItemId}}{{else}}Skeletal_Inventories{{/if}}'>
+            <bs-nav variant="tabs" class="flex-column">
+              <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix "Help:Start"}}'>
+                  <bs-nav-link event-key="welcome">Welcome to metaphactory
+                  </bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item>
+
+              <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix "Help:Tutorials"}}'>
+                  <bs-nav-link event-key="tutorials">Tutorials</bs-nav-link>
+                </semantic-link-container>
+
+                <bs-tab-content animation='true'>
+                  <bs-tab-pane event-key="tutorials" class='toc-sublist'>
+                    {{#bind
+                      gettingStartedTutorial=(rdf-resolvePrefix "Help:GettingStartedTutorial")
+                      ontologyModellingTutorial=(rdf-resolvePrefix "Help:OntologyModellingTutorial")
+                      appBuildingBasicsTutorial=(rdf-resolvePrefix "Help:AppBuildingBasicsTutorial")
+                    }}
+                      <semantic-link-container iri='{{gettingStartedTutorial}}'>
+                        <bs-nav-link event-key='{{gettingStartedTutorial}}'>
+                          Getting Started Tutorial
+                        </bs-nav-link>
+                      </semantic-link-container>
+
+                      <semantic-link-container iri='{{ontologyModellingTutorial}}'>
+                        <bs-nav-link event-key="{{ontologyModellingTutorial}}">
+                          Ontology Modeling Tutorial
+                        </bs-nav-link>
+                      </semantic-link-container>
+
+                      [[!--
+                        WIP
+                        <semantic-link-container iri='{{appBuildingBasicsTutorial}}'>
+                          <bs-nav-link event-key="{{appBuildingBasicsTutorial}}">
+                            App Building Basics Tutorial
+                          </bs-nav-link>
+                        </semantic-link-container>
+                      --]]
+                    {{/bind}}
+                  </bs-tab-pane>
+                </bs-tab-content>
+              </bs-nav-item>
+
+              <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix "Help:Documentation"}}'>
+                  <bs-nav-link event-key="documentation">Documentation</bs-nav-link>
+                </semantic-link-container>
+                <bs-tab-content animation='true'>
+                  <bs-tab-pane event-key="documentation" class='toc-sublist'>
+                    {{#bind
+                      knowledgeGraphEngineering=(rdf-resolvePrefix "Help:KnowledgeGraphManagement")
+                      applicationBuilding=(rdf-resolvePrefix "Help:ApplicationBuilding")
+                      administration=(rdf-resolvePrefix "Help:Administration")
+                    }}
+                      <semantic-link-container iri='{{knowledgeGraphEngineering}}'>
+                        <bs-nav-link event-key="{{knowledgeGraphEngineering}}">
+                          Knowledge Graph Management
+                        </bs-nav-link>
+                      </semantic-link-container>
+
+                      <semantic-link-container iri='{{applicationBuilding}}'>
+                        <bs-nav-link event-key="{{applicationBuilding}}">
+                          Application Building
+                        </bs-nav-link>
+                      </semantic-link-container>
+
+                      <semantic-link-container iri='{{administration}}'>
+                        <bs-nav-link event-key="{{administration}}">
+                          Administration
+                        </bs-nav-link>
+                      </semantic-link-container>
+                    {{/bind}}
+                  </bs-tab-pane>
+                </bs-tab-content>
+              </bs-nav-item>
+                 <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix "Help:Changelog"}}'>
+                  <bs-nav-link event-key="changelog">Changelog</bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item>
+              <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix ":RDFBONES_SkeletalInventories"}}'>
+                  <bs-nav-link event-key="Skeletal_Inventories">Skeletal Inventories</bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item>
+               <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix ":PSI_CreatePaleopath"}}'>
+                  <bs-nav-link event-key="PBP_Paleopath">PBP Paleopath</bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item>
+              <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix "Help:ProductSupport"}}'>
+                  <bs-nav-link event-key="support">
+                    Support
+                  </bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item>
+
+            </bs-nav>
+          </bs-tab-container>
+
+      </div>
+      <div class="help-page-content" data-flex-self="size-x9">
+        {{> @partial-block}}
+      </div>
+    </div>
+  </div>
+</div>
