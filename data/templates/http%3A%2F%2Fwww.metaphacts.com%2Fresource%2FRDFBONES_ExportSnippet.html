@@ -5,7 +5,7 @@ PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX standards-si: <http://w3id.org/rdfbones/ext/standards-si/>
 
-SELECT DISTINCT ?ID ?ROI ?MeasurementType ?Measurement WHERE {
+SELECT DISTINCT ?ID ?mysectionlabel ?ROI ?MeasurementType ?Measurement WHERE {
               
   					  ?? rdfs:label ?ID .
   					  ?? obo:BFO_0000051 ?section.
@@ -13,7 +13,8 @@ SELECT DISTINCT ?ID ?ROI ?MeasurementType ?Measurement WHERE {
    					  ?md <http://purl.obolibrary.org/obo/IAO_0000136> ?myROIInstance .
   					  ?myROIInstance a ?ROIClass .
   					  ?ROIClass rdfs:label ?ROI .
- 					    ?section a ?mysection. 
+ 					    ?section a ?mysection.
+					    ?mysection rdfs:label ?mysectionlabel .
   					  ?md a ?mdClass .
   					  ?mdClass rdfs:label ?MeasurementType.
   					  ?md <http://purl.obolibrary.org/obo/OBI_0001938> ?mdValueSpec.
@@ -26,7 +27,7 @@ SELECT DISTINCT ?ID ?ROI ?MeasurementType ?Measurement WHERE {
     				  			BIND(?mystate as ?Measurement)
   					 }
   					
-                    } ORDER BY ?ID ?ROI ?mdClassLabel
+                    } ORDER BY ?ID ?mysectionlabel ?ROI ?mdClassLabel
                     "
 header="text/csv" filename="[[this.label]].csv">
   <button class="btn btn-secondary"><strong>Download CSV Table for <i>[[this.label]]</i></strong></button>
