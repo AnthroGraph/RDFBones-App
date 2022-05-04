@@ -1,0 +1,150 @@
+<div class="page" style="margin-left:50px; margin-right: 50px; margin-bottom: 50px">
+<h3>Viewing  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]] Event on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date}' ]]</h3>
+
+<hr>
+<semantic-update query='
+PREFIX : <http://www.metaphacts.com/resource/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfbones: <http://w3id.org/rdfbones/core#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fma: <http://purl.org/sig/ont/fma/>
+PREFIX dc: <http://purl.org/dc#>
+        DELETE {GRAPH ?mygraph { 
+                ?PPI obo:BFO_0000051 ?? .
+                ?? a ?RP .
+                ?? rdfs:label ?label .                
+                ?myrole obo:BFO_0000054 ?? .
+                ?myrole a ?roletype .
+                ?myrole obo:RO_0000081 ?myobserver.
+                ?? obo:RO_0000057 ?myobserver .
+                ?? dc:date ?date.               
+              }}
+         WHERE {               
+           GRAPH ?mygraph {?? a ?o }
+                ?PPI obo:BFO_0000051 ?? .
+                ?? a ?RP .               
+                OPTIONAL {
+                ?? rdfs:label ?label .
+                } 
+                ?myrole obo:BFO_0000054 ?? .
+                ?myrole a ?roletype .
+                ?? dc:date ?date. 
+              OPTIONAL {
+                ?myrole obo:RO_0000081 ?myobserver.
+                ?? obo:RO_0000057 ?myobserver .
+                }
+            }   
+'
+id="DeleteResearchContributionProcess"
+variable-params='["RP","myrole","roletype","myobserver","date","mygraph", "o","PPI","label"]'
+post-action="[[singleValueFromSelect "PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?target WHERE {?object obo:BFO_0000051 ??. ?object obo:OBI_0000299 ?target}" ]]"
+show-confirmation="true"
+confirmation-options='{
+     "message": "Do you really want to delete this Entry and all associated data?",
+     "confirmLabel": "Delete"
+   }'
+>
+
+<button class='btn btn-primary btn-danger'><span class='fa fa-trash' style='pointer-events: none;'></span>&nbsp; <strong>DELETE this Event</strong></button>
+</semantic-update>
+<hr>
+<semantic-form
+subject='[[this]]'
+post-action='reload'
+persistence='sparql'
+
+fields='[{
+    "id": "editor",
+    "label": "Select  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]](s)  on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date}' ]]",
+    "xsdDatatype": "xsd:anyURI",
+    "minOccurs": 1,
+    "insertPattern": "
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX obo: <http://purl.obolibrary.org/obo/>
+      PREFIX vivo: <http://vivoweb.org/ontology/core#>
+      PREFIX phaleron-patho:<http://w3id.org/rdfbones/ext/phaleron-patho/>
+      PREFIX cidoc:<http://www.cidoc-crm.org/cidoc-crm/>
+
+      INSERT {GRAPH ?mygraph {  
+        $subject obo:RO_0000057 $value .
+        ?role obo:RO_0000081 $value.             
+       }} WHERE {
+        GRAPH ?mygraph {?? a ?o } .
+         ?role obo:BFO_0000054 $subject.
+}",
+
+"valueSetPattern": "
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    SELECT $value WHERE {
+                $value rdf:type obo:NCBITaxon_9606
+                }", 
+"selectPattern":"
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+SELECT $value WHERE{  
+        $subject obo:RO_0000057 $value .                  
+       }",
+                
+                
+
+"deletePattern": "
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    DELETE {GRAPH ?mygraph {  
+        $subject obo:RO_0000057 $value .
+        ?role obo:RO_0000081 $value.             
+       }} WHERE {
+        GRAPH ?mygraph {?? a ?o } .
+        ?role obo:BFO_0000054 $subject .
+        ?role obo:RO_0000081 $value.
+       }"
+
+ },
+ {
+         "id": "comment",
+         "label": "Optional: Please Comment on Event",
+         "xsdDatatype": "xsd:string",
+         "minOccurs": "0",
+         "maxOccurs": "1",
+	 
+         "selectPattern": "
+         PREFIX obo: <http://purl.obolibrary.org/obo/>
+         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>              
+         SELECT ?value WHERE {
+         ?subject  rdfs:comment ?value .
+         }",
+	 
+         
+         "insertPattern": "
+         PREFIX obo: <http://purl.obolibrary.org/obo/>
+         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+         INSERT {GRAPH ?mygraph {
+	 ?subject rdfs:comment ?value .}}
+         WHERE {
+         GRAPH ?mygraph {?subject a ?o } 
+          
+  	 }"
+	 ,
+         "deletePattern": "
+         PREFIX obo: <http://purl.obolibrary.org/obo/>
+         DELETE {?subject rdfs:comment ?value}
+         WHERE {
+         ?subject rdfs:comment ?value .
+         
+         }"
+	 }
+]'>
+  <semantic-form-select-input for='editor'></semantic-form-select-input>
+  <semantic-form-text-input for='comment' multiline="true"></semantic-form-text-input>
+
+<button name="submit" class="btn btn-primary"><strong>Save</strong></button>
+    <button name="reset" class="btn btn-secondary">Reset</button>
+</semantic-form>
+ <hr>
+<semantic-link iri="[[singleValueFromSelect "PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?target WHERE {?object obo:BFO_0000051 ??. ?object obo:OBI_0000299 ?target}" ]]" ><span class='fa fa-arrow-right' style='pointer-events: none;'></span>&nbsp; <strong>
+Back to Main Form</strong>
+</div>

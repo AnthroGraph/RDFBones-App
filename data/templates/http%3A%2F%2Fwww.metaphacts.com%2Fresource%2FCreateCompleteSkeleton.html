@@ -43,11 +43,14 @@
                   PREFIX owl: <http://www.w3.org/2002/07/owl#>
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
                   PREFIX fma: <http://purl.org/sig/ont/fma/>
-                
+                  PREFIX dc: <http://purl.org/dc#>
                   INSERT {GRAPH ?mygraph {
-                   ?subject a ?value .
+                   $subject a ?value .
+		   ?process a rdfbones:SkeletalInventoryProcess .
+		   ?process obo:OBI_0000299 $subject .
+		   $subject dc:date \"[[currentDateTime format="yyyy-MM-dd"]]\"^^xsd:date . 
                    ?mySpecimen a rdfbones:HumanSkeletonSpecimen.
-                   ?subject <http://semanticscience.org/resource/SIO_000563> ?mySpecimen.
+                   ?subject <http://semanticscience.org/resource/SIO_000563> ?mySpecimen .
                    ?mysectionInstance a ?mysections .
                    ?subject <http://purl.obolibrary.org/obo/BFO_0000051> ?mysectionInstance .
                    ?myROIInstance a ?myparts . 
@@ -125,7 +128,8 @@
                     BIND(URI(CONCAT(STR(?subject),\"-\",STR(?pp2))) AS ?myBoneInstance2) .
                     BIND(URI(CONCAT(STR(?subject),\"-\",STR(?pp3))) AS ?myROIInstance2) .
                     BIND(URI(CONCAT(STR(?subject),\"-\",STR(?pp4))) AS ?myBoneInstance4) .
-                    
+                    BIND(URI(CONCAT(STR(?subject),\"-Process\")) AS ?process) .
+
  									
 }",
         "valueSetPattern" : "
