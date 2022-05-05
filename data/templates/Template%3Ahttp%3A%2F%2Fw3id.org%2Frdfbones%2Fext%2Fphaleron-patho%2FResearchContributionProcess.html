@@ -1,3 +1,6 @@
+[[#if (ask ' ASK {SELECT  ?mySI  WHERE {?? a ?mySI . }}') ]]
+
+
 <div class="page" style="margin-left:50px; margin-right: 50px; margin-bottom: 50px">
 <h3>Viewing  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]] Event on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date}' ]]</h3>
 
@@ -20,7 +23,9 @@ PREFIX dc: <http://purl.org/dc#>
                 ?myrole a ?roletype .
                 ?myrole obo:RO_0000081 ?myobserver.
                 ?? obo:RO_0000057 ?myobserver .
-                ?? dc:date ?date.               
+                ?? dc:date ?date.
+		?? rdfs:comment ?mycomment .
+		
               }}
          WHERE {               
            GRAPH ?mygraph {?? a ?o }
@@ -36,11 +41,15 @@ PREFIX dc: <http://purl.org/dc#>
                 ?myrole obo:RO_0000081 ?myobserver.
                 ?? obo:RO_0000057 ?myobserver .
                 }
+		OPTIONAL {
+		?? rdfs:comment ?mycomment .
+}
+	      
             }   
 '
 id="DeleteResearchContributionProcess"
-variable-params='["RP","myrole","roletype","myobserver","date","mygraph", "o","PPI","label"]'
-post-action="[[singleValueFromSelect "PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?target WHERE {?object obo:BFO_0000051 ??. ?object obo:OBI_0000299 ?target}" ]]"
+variable-params='["RP","myrole","roletype","myobserver","date","mygraph", "o","PPI","label","mycomment"]'
+post-action="reload"
 show-confirmation="true"
 confirmation-options='{
      "message": "Do you really want to delete this Entry and all associated data?",
@@ -145,6 +154,10 @@ SELECT $value WHERE{
     <button name="reset" class="btn btn-secondary">Reset</button>
 </semantic-form>
  <hr>
-<semantic-link iri="[[singleValueFromSelect "PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?target WHERE {?object obo:BFO_0000051 ??. ?object obo:OBI_0000299 ?target}" ]]" ><span class='fa fa-arrow-right' style='pointer-events: none;'></span>&nbsp; <strong>
-Back to Main Form</strong>
+<!-- <semantic-link iri="[[singleValueFromSelect "PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?target WHERE {?object obo:BFO_0000051 ??. ?object obo:OBI_0000299 ?target}" ]]" ><span class='fa fa-arrow-right' style='pointer-events: none;'></span>&nbsp; <strong>
+     Back to Main Form</strong> -->
+   <h4>Please close this Window after editing!</h4>
 </div>
+[[else]]
+<h4>ResearchProcess successfully deleted</h4>
+[[/if]]
