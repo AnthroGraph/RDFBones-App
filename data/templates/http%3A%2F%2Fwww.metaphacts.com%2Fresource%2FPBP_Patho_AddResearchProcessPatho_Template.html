@@ -90,7 +90,8 @@ SELECT $value WHERE {
 </mp-event-proxy>
 <mp-event-proxy on-event-type="Form.ResourceUpdated" on-event-source="ResearchProcess" proxy-event-type="Component.TemplateUpdate" proxy-targets='["RP-update"]'>
 </mp-event-proxy>
-[[>:RDFBONES_FormSuccessFeedbackEventSnippet event-source="ResearchProcess" event-target="RP-update"]]
+[[>:RDFBONES_FormSuccessFeedbackTemplateSnippetCustom ufb-id="RP-update" ufbTemplate="RP-Template" ufbname="New ResearchProcess Created. Please Select from Table below for Editing"]]                  
+
 
 <br>
 <mp-event-proxy on-event-type="Form.ResourceUpdated" on-event-source="ResearchProcess" proxy-event-type="Component.TemplateUpdate" proxy-targets='["update-forms"]'>
