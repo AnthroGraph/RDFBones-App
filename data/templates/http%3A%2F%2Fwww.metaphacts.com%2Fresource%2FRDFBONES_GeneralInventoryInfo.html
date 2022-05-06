@@ -1,3 +1,4 @@
+[[typename]] <strong>[[singleValueFromSelect "SELECT ?label WHERE {?? rdfs:label ?label.}"]]</strong>  created on <strong>[[singleValueFromSelect "PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date.}"]]</strong>
 <!-- Enter Creator -->
 
 <semantic-form
@@ -10,7 +11,7 @@ fields='[
   {
   
     "id": "creatorentry",
-    "label": "Creator of inventory",
+    "label": "Creator of [[typename]]",
     "minOccurs": "1",
 
     "selectPattern":"
@@ -40,7 +41,7 @@ fields='[
 },
 {
  "id": "dateentry",
-    "label": "Date of inventory creation",
+    "label": "Date of [[typename]] creation",
     "minOccurs": 1,
     "maxOccurs": 1,
     "xsdDatatype": "xsd:date",
@@ -73,7 +74,7 @@ fields='[
 {
   
     "id": "commententry",
-    "label": "Comment concerning this inventory (optional)",
+    "label": "Comment concerning this [[typename]] (optional)",
     "minOccurs": "0",
     "maxOccurs": "1",
 
@@ -103,16 +104,20 @@ fields='[
 
 <semantic-form-select-input for="creatorentry">
 </semantic-form-select-input>
-<semantic-form-datetime-input for="dateentry" mode="date" placeholder='[[currentDateTime format="yyyy-MM-dd"]]' default-value='[[currentDateTime format="yyyy-MM-dd"]]'>
+<!--
+    <semantic-form-datetime-input for="dateentry" mode="date" placeholder='[[currentDateTime format="yyyy-MM-dd"]]' default-value='[[currentDateTime format="yyyy-MM-dd"]]'>
+      
 </semantic-form-datetime-input>
+    -->
 <semantic-form-text-input for="commententry" multiline="true">
 </semantic-form-text-input>
       <button
         name="submit"
         class="btn btn-secondary  btn-sm"
       >Save</button>
-     [[>:RDFBONES_FormSuccessFeedbackTemplateSnippet ufb-id="show-after-general-update" ufbTemplate="general-Template" ufbname="General Information"]]
+    
 </semantic-form>
-  <!-- user feedback on form update -->
-            [[>:RDFBONES_FormSuccessFeedbackEventSnippet event-source="creator-skeleton" event-target="show-after-general-update"]]
+<!-- user feedback on form update -->
+ [[>:RDFBONES_FormSuccessFeedbackTemplateSnippet ufb-id="show-after-general-update" ufbTemplate="general-Template" ufbname="General Information"]]
+[[>:RDFBONES_FormSuccessFeedbackEventSnippet event-source="creator-skeleton" event-target="show-after-general-update"]]
 <hr>
