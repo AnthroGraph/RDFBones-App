@@ -4,7 +4,7 @@
   
 <h2><img src="../assets/images/skull.png" alt="Skull"  height="40">&nbsp; Browse Skeletal Inventories</h2>
   
-  [[#if (ask 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {SELECT  ?mySI  WHERE {        ?myclasses rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton> .  ?mySI a ?myclasses . }}')]]
+[[#if (ask 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {SELECT  ?mySI  WHERE {?myclasses rdfs:subClassOf <http://w3id.org/rdfbones/core#InventoryOfSkeleton>. ?mySI a ?myclasses . }}')]]
   
 <semantic-table 
   query='
@@ -23,8 +23,8 @@
   column-configuration='[
    
     {"variableName": "mySI", "displayName": "Inventory"},
-    {"variableName": "myclasses", "displayName": "Class"},
-    {"variableName": "mycreator", "displayName": "Created by"},
+    {"variableName": "myclasses", "displayName": "Class", "showFilter": true, "filterType": "multiselect"},
+    
     {"variableName": "mydate", "displayName": "Created on"}
                      
   ]'
