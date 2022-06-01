@@ -79,7 +79,7 @@
                     
                     ?mysections rdfs:subClassOf ?myRS .
                     ?myRS a owl:Restriction ;
-                 		      owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                          owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
                           owl:someValuesFrom ?pp1 .
                     ?pp1 owl:intersectionOf ?mi.
                     ?mi rdf:first ?rep4state ; 
@@ -87,10 +87,10 @@
 
                     ?rep4state rdfs:label ?rep4stateLabel.
    
-   									?myRS2list rdf:first ?myRS2 .
-   									?myRS2 a owl:Restriction ;
-  	 							         owl:onProperty <http://purl.obolibrary.org/obo/IAO_0000136> ;
-     							         owl:onClass ?myparts .
+   		    ?myRS2list rdf:first ?myRS2 .
+   	            ?myRS2 a owl:Restriction ;
+  	                   owl:onProperty <http://purl.obolibrary.org/obo/IAO_0000136> ;
+     			   (owl:onClass|owl:someValuesFrom) ?myparts .
                   
                     ?rep4state rdfs:subClassOf ?myRS3. 
                     ?myRS3 a owl:Restriction ; 
