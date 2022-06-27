@@ -81,6 +81,7 @@
                     ?myRS a owl:Restriction ;
                           owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
                           owl:someValuesFrom ?pp1 .
+	            OPTIONAL {
                     ?pp1 owl:intersectionOf ?mi.
                     ?mi rdf:first ?rep4state ; 
                     rdf:rest ?myRS2list . 
@@ -117,6 +118,7 @@
                         owl:onProperty fma:regional_part_of;
                         (owl:someValuesFrom|owl:allValuesFrom) ?pp4 .
                         }
+			}
                   
                     BIND(STR(?mysections) AS ?mySectionID) .
  								    BIND(URI(CONCAT(STR(?subject),\"-\",?mySectionID)) AS ?mysectionInstance) .
