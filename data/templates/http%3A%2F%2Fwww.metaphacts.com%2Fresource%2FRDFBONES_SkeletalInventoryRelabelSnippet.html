@@ -53,7 +53,7 @@
 </semantic-form>
 [[>:RDFBONES_FormSuccessFeedbackEventSnippet event-source="rename-skeleton" event-target="show-after-rename-skeleton-update"]]
 
-<br>
+<br><div class="text-right">
 <semantic-update query='
 PREFIX : <http://www.metaphacts.com/resource/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
@@ -82,8 +82,12 @@ confirmation-options='{
    }'
 >
 
-<button class='btn btn-primary btn-danger'><span class='fa fa-trash' style='pointer-events: none;'></span>&nbsp; <strong>DELETE Entire Skeletal Inventory</strong></button>
-</semantic-update>
+  
+    
+    <button class='btn btn-primary btn-danger'><span class='fa fa-trash' style='pointer-events: none;'></span>&nbsp; <strong>DELETE Entire Skeletal Inventory</strong></button>
+    
+ 
+</semantic-update> </div>
 [[else]]
 Skeletal Inventory [[this.label]] has been successfully deleted.
 [[/if]]
