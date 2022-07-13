@@ -246,11 +246,43 @@ Use "tocItemId" parameter to define an ID of active tab
                   <bs-nav-link event-key="Skeletal_Inventories">Skeletal Inventories</bs-nav-link>
                 </semantic-link-container>
               </bs-nav-item>
-               <bs-nav-item>
+
+
+	      <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix "Help:PaleopathModules"}}'>
+                  <bs-nav-link event-key="Patholist">Paleopath Modules</bs-nav-link>
+                </semantic-link-container>
+	      <bs-tab-content animation='true'>
+                  <bs-tab-pane event-key="Patholist" class='toc-sublist'>
+                    {{#bind
+                      PBPPatho=(rdf-resolvePrefix ":PBP_Patho_CreatePaleopath")
+                      PBPDentalPatho=(rdf-resolvePrefix ":PBP_Patho_CreateDentalPaleopath")
+                    }}
+                      <semantic-link-container iri='{{PBPPatho}}'>
+                        <bs-nav-link event-key="{{PBPPatho}}">
+                          PBP Osteo Paleopath
+                        </bs-nav-link>
+                      </semantic-link-container>
+
+                      <semantic-link-container iri='{{PBPDentalPatho}}'>
+                        <bs-nav-link event-key="{{PBPDentalPatho}}">
+                          PBP Dental Paleopath
+                        </bs-nav-link>
+                      </semantic-link-container>
+
+                     {{/bind}}
+                  </bs-tab-pane>
+                </bs-tab-content>
+             <!--  <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_Patho_CreatePaleopath"}}'>
                   <bs-nav-link event-key="PBP_Paleopath">PBP Paleopath</bs-nav-link>
                 </semantic-link-container>
-              </bs-nav-item>
+               </bs-nav-item>
+	        <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_Patho_CreateDentalPaleopath"}}'>
+                  <bs-nav-link event-key="PBP_Patho_DentalPaleopath">PBP Dental Paleopath</bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item> -->
               <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix "Help:ProductSupport"}}'>
                   <bs-nav-link event-key="support">
