@@ -91,9 +91,10 @@ SELECT $value WHERE {
 <mp-event-trigger type="Component.Refresh" targets='["mytable","ToothCrown"]'>
   <button class="btn btn-secondary">Reset Form (before creating new instances)</button>
 </mp-event-trigger>
+</div>
+
 </semantic-form>
 </mp-event-target-refresh>
-</div>
 <mp-event-proxy on-event-type="Form.ResourceCreated" on-event-source="ResearchProcess" proxy-event-type="Component.TemplateUpdate" proxy-targets='["RP-update"]'>
 </mp-event-proxy>
 
