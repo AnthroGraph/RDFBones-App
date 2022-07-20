@@ -1,3 +1,5 @@
+<mp-event-target-refresh id="ResearchProcess">
+
 <semantic-form
 
   new-subject-template="http://rdfbones.org/records/ResearchProcess-{{UUID}}"
@@ -83,10 +85,19 @@ SELECT $value WHERE {
 <semantic-form-select-input for='roletype'></semantic-form-select-input>
 <semantic-form-datetime-input for="dateentry" mode="date" >
 </semantic-form-datetime-input>
+ <div class="semantic-form-footer-buttons">
+
 <button name="submit" class="btn btn-primary"><strong>Save</strong></button>
-<button name="reset" class="btn btn-secondary">Reset</button>
+<mp-event-trigger type="Component.Refresh" targets='["mytable","ToothCrown"]'>
+  <button class="btn btn-secondary">Reset Form (before creating new instances)</button>
+</mp-event-trigger>
 </semantic-form>
+</mp-event-target-refresh>
+</div>
 <mp-event-proxy on-event-type="Form.ResourceCreated" on-event-source="ResearchProcess" proxy-event-type="Component.TemplateUpdate" proxy-targets='["RP-update"]'>
+</mp-event-proxy>
+
+<mp-event-proxy on-event-type="Form.ResourceCreated" on-event-source="ResearchProcess" proxy-event-type="Component.Refresh" proxy-targets='["ResearchProcess","mytable"]'>
 </mp-event-proxy>
 <mp-event-proxy on-event-type="Form.ResourceUpdated" on-event-source="ResearchProcess" proxy-event-type="Component.TemplateUpdate" proxy-targets='["RP-update"]'>
 </mp-event-proxy>
@@ -116,7 +127,7 @@ SELECT $value WHERE {
   <template id="t">
     {{#ifCond bindings.0.value.value ">" "0"}}
 <strong>Show all available Observer/Editing Events:</strong><br>
-<mp-event-trigger type="Component.Refresh" targets='["mytable"]'>
+<mp-event-trigger type="Component.Refresh" targets='["mytable", "ResearchProcess"]'>
   <button class="btn btn-secondary">Refresh Table</button>
 </mp-event-trigger>
 <mp-event-target-refresh id="mytable">
