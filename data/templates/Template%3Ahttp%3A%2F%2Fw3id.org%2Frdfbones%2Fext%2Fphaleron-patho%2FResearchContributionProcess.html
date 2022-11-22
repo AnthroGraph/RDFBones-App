@@ -2,7 +2,7 @@
 
 
 <div class="page" style="margin-left:50px; margin-right: 50px; margin-bottom: 50px">
-<h3>Viewing  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]] Event on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date}' ]]</h3>
+<h3>Viewing  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]] Event on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc/terms/> SELECT ?date WHERE {?? dc:date ?date}' ]]</h3>
 
 <hr>
 <semantic-update query='
@@ -14,7 +14,7 @@ PREFIX rdfbones: <http://w3id.org/rdfbones/core#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fma: <http://purl.org/sig/ont/fma/>
-PREFIX dc: <http://purl.org/dc#>
+PREFIX dc: <http://purl.org/dc/terms/>
         DELETE {GRAPH ?mygraph { 
                 ?PPI obo:BFO_0000051 ?? .
                 ?? a ?RP .
@@ -67,7 +67,7 @@ persistence='sparql'
 
 fields='[{
     "id": "editor",
-    "label": "Select  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]](s)  on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date}' ]]",
+    "label": "Select  [[singleValueFromSelect 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX obo: <http://purl.obolibrary.org/obo/> SELECT ?typelabel WHERE {?typeofevent obo:BFO_0000054 ??. ?typeofevent a ?typeclass . ?typeclass rdfs:label ?typelabel}' ]](s)  on [[singleValueFromSelect 'PREFIX dc: <http://purl.org/dc/terms/> SELECT ?date WHERE {?? dc:date ?date}' ]]",
     "xsdDatatype": "xsd:anyURI",
     "minOccurs": 1,
     "insertPattern": "

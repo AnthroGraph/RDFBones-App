@@ -1,6 +1,6 @@
 <!-- <h3>[[typename]] <strong>[[singleValueFromSelect "SELECT ?label WHERE {?? rdfs:label ?label.}"]]</strong></h3>
 
-<!-- created on <strong>[[singleValueFromSelect "PREFIX dc: <http://purl.org/dc#> SELECT ?date WHERE {?? dc:date ?date.}"]]</strong> -->
+<!-- created on <strong>[[singleValueFromSelect "PREFIX dc: <http://purl.org/dc/terms/> SELECT ?date WHERE {?? dc:date ?date.}"]]</strong> -->
 <!-- Enter Creator -->
 
 <semantic-form
@@ -17,7 +17,7 @@ fields='[
     "minOccurs": "1",
 
     "selectPattern":"
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     SELECT $value  WHERE {
       $subject dc:creator $value 
      
@@ -29,14 +29,14 @@ fields='[
                 }", 
     
     "insertPattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     INSERT {GRAPH ?mygraph {$subject dc:creator $value }} WHERE {
       GRAPH ?mygraph {$subject a ?o} 
 
 }",
     "deletePattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     DELETE {$subject dc:creator $value} WHERE { 
 }"
@@ -48,27 +48,27 @@ fields='[
     "maxOccurs": 1,
     "xsdDatatype": "xsd:date",
     "selectPattern":"
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     SELECT $value  WHERE {
       $subject dc:date $value .
      
 }",
     "valueSetPattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     SELECT $value WHERE {
                 ?subject dc:date ?value
                 }", 
     
     "insertPattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     INSERT {GRAPH ?mygraph {$subject dc:date $value }} WHERE {
       GRAPH ?mygraph {$subject a ?o } 
 
 }",
     "deletePattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     DELETE {$subject dc:date $value} WHERE { 
 }"

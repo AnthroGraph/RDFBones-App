@@ -66,7 +66,7 @@ SELECT $value WHERE {
     "maxOccurs": 1,
     "minOccurs": 1,
     "insertPattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
     INSERT {GRAPH ?mygraph {  
@@ -76,7 +76,7 @@ SELECT $value WHERE {
         GRAPH ?mygraph {?? a ?o } .      
 }",
  "deletePattern": "
-    PREFIX dc: <http://purl.org/dc#>
+    PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     DELETE {$subject dc:date $value} WHERE { 
 }" 
@@ -92,7 +92,7 @@ SELECT $value WHERE {
  <div class="semantic-form-footer-buttons">
 
 <button name="submit" class="btn btn-primary"><strong>Save</strong></button>
-<mp-event-trigger type="Component.Refresh" targets='["mytable","ToothCrown"]'>
+<mp-event-trigger type="Component.Refresh" targets='["mytable","ResearchProcess"]'>
   <button class="btn btn-secondary">Reset Form</button>
 </mp-event-trigger>
 </div>
@@ -121,7 +121,7 @@ SELECT $value WHERE {
 		       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 		       PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 		       PREFIX obo: <http://purl.obolibrary.org/obo/>
-		       PREFIX dc: <http://purl.org/dc#>
+		       PREFIX dc: <http://purl.org/dc/terms/>
 		       SELECT (count(DISTINCT ?RP) AS ?value) WHERE { 
 		       ?paleopath_observation obo:OBI_0000299 ??.
 		       ?paleopath_observation a [[paleopath_observation_type]] .
@@ -142,7 +142,7 @@ SELECT $value WHERE {
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
       PREFIX obo: <http://purl.obolibrary.org/obo/>
-      PREFIX dc: <http://purl.org/dc#>
+      PREFIX dc: <http://purl.org/dc/terms/>
       SELECT DISTINCT ?RP ?date ?typelabel ?typeofEvent ?homosapiens WHERE { 
              ?paleopath_observation obo:OBI_0000299 ??.
              ?paleopath_observation a [[paleopath_observation_type]] .
