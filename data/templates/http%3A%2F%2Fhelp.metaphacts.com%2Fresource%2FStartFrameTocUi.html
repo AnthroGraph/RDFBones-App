@@ -154,13 +154,14 @@ Use "tocItemId" parameter to define an ID of active tab
   <div class="ml-5 mt-5 mr-5">
     <div data-flex-layout="rows top-center">
       <div class="sidebar-container d-lg-block" data-flex-self="size-x1 left">
-
+	<h3>Available Modules</h3>
           <bs-tab-container
             id="some-ide"
             class="bs-left-vertical-tabs"
             default-active-key='{{#if tocItemId}}{{tocItemId}}{{else}}Skeletal_Inventories{{/if}}'>
             <bs-nav variant="tabs" class="flex-column">
-              <bs-nav-item>
+	       <!-- 
+	      <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix "Help:Start"}}'>
                   <bs-nav-link event-key="welcome">Welcome to metaphactory
                   </bs-nav-link>
@@ -203,7 +204,7 @@ Use "tocItemId" parameter to define an ID of active tab
                   </bs-tab-pane>
                 </bs-tab-content>
               </bs-nav-item>
-
+	     
               <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix "Help:Documentation"}}'>
                   <bs-nav-link event-key="documentation">Documentation</bs-nav-link>
@@ -241,6 +242,7 @@ Use "tocItemId" parameter to define an ID of active tab
                   <bs-nav-link event-key="changelog">Changelog</bs-nav-link>
                 </semantic-link-container>
               </bs-nav-item>
+		 -->
               <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_SexEst_CreateSexEst"}}'>
                   <bs-nav-link event-key="Sex_Estimation">Sex Estimation</bs-nav-link>
@@ -292,7 +294,7 @@ Use "tocItemId" parameter to define an ID of active tab
                 <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_Patho_CreateDentalPaleopath"}}'>
                   <bs-nav-link event-key="PBP_Patho_DentalPaleopath">PBP Dental Paleopath</bs-nav-link>
                 </semantic-link-container>
-              </bs-nav-item> -->
+              </bs-nav-item> 
               <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix "Help:ProductSupport"}}'>
                   <bs-nav-link event-key="support">
@@ -300,6 +302,7 @@ Use "tocItemId" parameter to define an ID of active tab
                   </bs-nav-link>
                 </semantic-link-container>
               </bs-nav-item>
+	      -->
 	      <bs-nav-item>
 	      <mp-has-permission permission="forms:sparql:insert">
 		 <semantic-link-container iri='{{rdf-resolvePrefix ":RDFBones_NameEntry"}}'>
