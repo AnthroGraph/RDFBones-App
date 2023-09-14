@@ -243,16 +243,18 @@ Use "tocItemId" parameter to define an ID of active tab
                 </semantic-link-container>
               </bs-nav-item>
 		 -->
+	       <bs-nav-item>
+                <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_AgeEst_CreateAgeEstimation"}}'>
+                  <bs-nav-link event-key="Age_Estimation">Age Estimation</bs-nav-link>
+                </semantic-link-container>
+              </bs-nav-item>
+		 
               <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_SexEst_CreateSexEst"}}'>
                   <bs-nav-link event-key="Sex_Estimation">Sex Estimation</bs-nav-link>
                 </semantic-link-container>
               </bs-nav-item>
-	       <bs-nav-item>
-                <semantic-link-container iri='{{rdf-resolvePrefix ":PBP_Patho_CreateAgeEstimation"}}'>
-                  <bs-nav-link event-key="Age_Estimation">Age Estimation</bs-nav-link>
-                </semantic-link-container>
-              </bs-nav-item>
+	       
               <bs-nav-item>
                 <semantic-link-container iri='{{rdf-resolvePrefix ":RDFBONES_SkeletalInventories"}}'>
                   <bs-nav-link event-key="Skeletal_Inventories">Skeletal Inventories</bs-nav-link>
@@ -306,7 +308,7 @@ Use "tocItemId" parameter to define an ID of active tab
 	      <bs-nav-item>
 	      <mp-has-permission permission="forms:sparql:insert">
 		 <semantic-link-container iri='{{rdf-resolvePrefix ":RDFBones_NameEntry"}}'>
-                  <bs-nav-link event-key="NameEntry">Edit Homo Sapiens</bs-nav-link>
+                  <bs-nav-link event-key="NameEntry">Edit User Data</bs-nav-link>
                 </semantic-link-container>
 	      </mp-has-permission>
 	      </bs-nav-item>
